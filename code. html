@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+
+<html lang="ar" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>شرح كود قائمة الطعام بالتفصيل</title>
+
+    <style>
+
+        body {
+
+            font-family: 'Tahoma', sans-serif;
+
+            line-height: 1.8;
+
+            margin: 20px;
+
+            background-color: #f9f9f9;
+
+            color: #333;
+
+        }
+
+        .container {
+
+            background-color: #fff;
+
+            padding: 25px;
+
+            border-radius: 8px;
+
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+
+        }
+
+        h1, h2, h3 {
+
+            color: #2c3e50;
+
+            border-bottom: 2px solid #3498db;
+
+            padding-bottom: 10px;
+
+        }
+
+        h1 {
+
+            text-align: center;
+
+            color: #16a085;
+
+            border-bottom-color: #16a085;
+
+        }
+
+        pre {
+
+            background-color: #2d2d2d;
+
+            color: #f8f8f2;
+
+            padding: 15px;
+
+            border-radius: 5px;
+
+            overflow-x: auto;
+
+            direction: ltr; /* الكود يكون من اليسار لليمين */
+
+            text-align: left;
+
+        }
+
+        code {
+
+            font-family: 'Consolas', 'Monaco', monospace;
+
+            font-size: 0.95em;
+
+        }
+
+        .comment {
+
+            color: #7f8c8d;
+
+            font-style: italic;
+
+        }
+
+        .keyword {
+
+            color: #f92672; /* Pink for keywords */
+
+        }
+
+        .type {
+
+            color: #66d9ef; /* Cyan for types */
+
+        }
+
+        .string {
+
+            color: #e6db74; /* Yellow for strings */
+
+        }
+
+        .number {
+
+            color: #ae81ff; /* Purple for numbers */
+
+        }
+
+        .preprocessor {
+
+            color: #fd971f; /* Orange for preprocessor */
+
+        }
+
+        .class-name {
+
+            color: #a6e22e; /* Green for class names */
+
+        }
+
+        p strong {
+
+            color: #c0392b;
+
+        }
+
+        .note {
+
+            background-color: #e8f6f3;
+
+            border-left: 5px solid #1abc9c;
+
+            padding: 15px;
+
+            margin: 15px 0;
+
+            border-radius: 4px;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>بسم الله الرحمن الرحيم - شرح كود قائمة الطعام الخاص بي</h1>
+
+        <p class="note">أهلاً بكم! في هذا الشرح، سأقوم بتفصيل الكود الذي كتبته لإنشاء نظام بسيط لإدارة قائمة طعام مطعم باستخدام لغة C++. سأشرح كل خطوة وكأنني أنا من قام بكتابتها، موضحًا الأسباب وراء كل قرار اتخذته.</p>
+
+
+
+        <h2>الملف الأول: `menu_item.h` (ملف الترويسة/الهيدر)</h2>
+
+        <p>هذا الملف هو الأساس، حيث عرفت فيه الهيكل العام لعناصر قائمة الطعام وأصنافها المختلفة.</p>
+
+
+
+        <h3>1. حارس التضمين (Include Guard)</h3>
+
+        <pre><code class="preprocessor">// بسم الله الرحمن الرحيم
+
+// هذا حارس التضمين، يضمن أن محتوى هذا الملف يتم تضمينه مرة واحدة فقط
+
+// حتى لو حاولت تضمينه في عدة أماكن في المشروع. مفيد جداً لتجنب أخطاء التعريف المكرر.
+
+#ifndef MENU_ITEM_H
+
+#define MENU_ITEM_H</code></pre>
+
+        <p>أول شيء فعلته هو وضع <strong>حارس التضمين</strong>. هذا مهم جدًا عشان لو المشروع كبر وحاولت أضمّن هذا الملف (`menu_item.h`) في أكثر من مكان، الكومبايلر ما يشتكي من تعريفات مكررة لنفس الكلاسات. الفكرة هي أني أتحقق إذا كان `MENU_ITEM_H` (اسم مميز اخترته) مُعرَّف من قبل (`#ifndef`). إذا لم يكن مُعرَّفًا، أقوم بتعريفه (`#define`) وأضع كل كود الملف بينهما، وأنهي بـ `#endif` في آخر الملف.</p>
+
+
+
+        <h3>2. تضمين المكتبات الضرورية</h3>
+
+        <pre><code><span class="comment">// هنا أستدعي المكتبات اللي بحتاجها</span>
+
+<span class="preprocessor">#include <string></span> <span class="comment">// عشان أقدر أستخدم النصوص (std::string)</span>
+
+<span class="preprocessor">#include <iostream></span> <span class="comment">// عشان أقدر أطبع على الشاشة (std::cout) وأستقبل مدخلات (ولو إني ما استخدمت std::cin هنا)</span>
+
+<span class="preprocessor">#include <iomanip></span> <span class="comment">// هذي عشان أنسق شكل الطباعة، مثل تحديد عدد الخانات العشرية أو محاذاة النص</span>
+
+<span class="keyword">using namespace</span> std;</code></pre>
+
+        <p>بعد كذا، احتجت أضمّن بعض المكتبات القياسية:</p>
+
+        <ul>
+
+            <li><code><string></code>: عشان أقدر أستخدم نوع البيانات <code>std::string</code> لتخزين أسماء العناصر.</li>
+
+            <li><code><iostream></code>: عشان أقدر أستخدم <code>std::cout</code> للطباعة على الشاشة (مفيد لعرض القائمة).</li>
+
+            <li><code><iomanip></code>: هذي مكتبة مهمة عشان أتحكم في تنسيق المخرجات، مثل تحديد عدد الأماكن العشرية للأسعار أو محاذاة النصوص بشكل جميل.</li>
+
+        </ul>
+
+        <p>واستخدمت <code>using namespace std;</code> عشان أختصر على نفسي وما أضطر أكتب <code>std::</code> قبل كل استخدام لـ <code>string</code> أو <code>cout</code> وغيرها. أعرف إن البعض يفضل تجنبها في ملفات الهيدر، لكني هنا استخدمتها للتبسيط في هذا المشروع الصغير.</p>
+
+
+
+        <h3>3. تعريف الكلاس الأساسي: `MenuItem`</h3>
+
+        <pre><code class="keyword">class</span> <span class="class-name">MenuItem</span> {
+
+<span class="keyword">protected</span>: <span class="comment">// الأعضاء هنا بتكون محمية، يعني الصنف نفسه والأصناف اللي ترث منه (زي البرجر والبيتزا) يقدرون يوصلون لها مباشرة</span>
+
+    std::string name; <span class="comment">// اسم العنصر</span>
+
+    <span class="type">double</span> price;     <span class="comment">// سعر العنصر</span>
+
+    <span class="type">int</span> quantity;     <span class="comment">// الكمية المتوفرة من العنصر</span>
+
+
+
+<span class="keyword">public</span>: <span class="comment">// الأعضاء هنا بتكون عامة، يعني أي جزء من الكود يقدر يوصل لها</span>
+
+    <span class="comment">// هذي الدالة البانية (الكونستركتور) للصنف، تاخذ الاسم والسعر والكمية كمدخلات</span>
+
+    <span class="comment">// وتقوم بإسنادها للمتغيرات الخاصة بالكائن اللي قاعد أنشئه</span>
+
+    <span class="class-name">MenuItem</span>(<span class="keyword">const</span> std::string& name, <span class="type">double</span> price, <span class="type">int</span> quantity)
+
+    : name(name), price(price), quantity(quantity) {} <span class="comment">// هذي طريقة مختصرة لعملية الإسناد للمتغيرات (initializer list)</span>
+
+
+
+    <span class="comment">// هذي الدالة الهادمة (الديستركتور)، مهمة جداً لما أتعامل مع الوراثة وتعدد الأوجه (polymorphism)</span>
+
+    <span class="comment">// كلمة virtual تضمن إنه لو حذفت كائن من صنف مشتق عن طريق مؤشر من الصنف الأساسي،</span>
+
+    <span class="comment">// يتم استدعاء الدالة الهادمة الصحيحة (الخاصة بالصنف المشتق ثم الأساسي). بدونها ممكن يصير تسرب للذاكرة.</span>
+
+    <span class="keyword">virtual</span> ~<span class="class-name">MenuItem</span>() {}
+
+
+
+    <span class="comment">// هذي دالة لعرض تفاصيل العنصر. حطيتها virtual عشان الأصناف المشتقة تقدر تعيد تعريفها (override)</span>
+
+    <span class="comment">// وتضيف تفاصيلها الخاصة. كلمة const في الأخير تعني إن هذي الدالة ما راح تعدل على بيانات الكائن (member variables).</span>
+
+    <span class="keyword">virtual</span> <span class="type">void</span> displayItem() <span class="keyword">const</span> {
+
+        <span class="comment">// هنا أستخدم iomanip عشان أنسق الطباعة</span>
+
+        cout << left << setw(<span class="number">25</span>) << name <span class="comment">// محاذاة لليسار وعرض 25 حرف للاسم</span>
+
+                  << <span class="string">" | Price: "</span> << fixed << setprecision(<span class="number">2</span>) << price << <span class="string">" SAR"</span> <span class="comment">// السعر برقمين بعد الفاصلة العشرية</span>
+
+                  << <span class="string">" | Quantity: "</span> << quantity; <span class="comment">// الكمية</span>
+
+    }
+
+
+
+    <span class="comment">// دوال بسيطة عشان أقدر أجيب (get) قيم المتغيرات الخاصة من خارج الكلاس</span>
+
+    <span class="comment">// حطيت const عشان أوضح إنها دوال قراءة فقط وما تعدل على الكائن</span>
+
+    std::string getName() <span class="keyword">const</span> { <span class="keyword">return</span> name; }
+
+    <span class="type">double</span> getPrice() <span class="keyword">const</span> { <span class="keyword">return</span> price; }
+
+    <span class="type">int</span> getQuantity() <span class="keyword">const</span> { <span class="keyword">return</span> quantity; }
+
+
+
+    <span class="comment">// دالة لتعديل (set) الكمية. فيها شرط بسيط عشان أتأكد إن الكمية ما تكون سالبة</span>
+
+    <span class="type">void</span> setQuantity(<span class="type">int</span> newQuantity) {
+
+        <span class="keyword">if</span> (newQuantity >= <span class="number">0</span>) { <span class="comment">// التحقق من أن الكمية الجديدة ليست سالبة</span>
+
+            quantity = newQuantity;
+
+        }
+
+        <span class="comment">// ممكن هنا أضيف else وأطبع رسالة خطأ لو المستخدم حاول يحط كمية سالبة</span>
+
+    }
+
+};</code></pre>
+
+        <p>هنا بدأت بتعريف الكلاس الأساسي <code>MenuItem</code> اللي يمثل أي عنصر في القائمة بشكل عام.</p>
+
+        <ul>
+
+            <li><strong>الأعضاء المحمية (<code>protected</code>):</strong>
+
+                <ul>
+
+                    <li><code>name</code> (من نوع <code>std::string</code>): لتخزين اسم العنصر.</li>
+
+                    <li><code>price</code> (من نوع <code>double</code>): لتخزين سعر العنصر.</li>
+
+                    <li><code>quantity</code> (من نوع <code>int</code>): لتخزين الكمية المتوفرة.</li>
+
+                </ul>
+
+                اخترت <code>protected</code> عشان الكلاسات اللي بترث من <code>MenuItem</code> (مثل <code>Burger</code>) تقدر توصل لهذه المتغيرات مباشرة، لكن أي كود خارج هذه العائلة من الكلاسات ما يقدر يوصل لها مباشرة (يحتاج يستخدم الدوال العامة).
+
+            </li>
+
+            <li><strong>الأعضاء العامة (<code>public</code>):</strong>
+
+                <ul>
+
+                    <li><strong>الدالة البانية (Constructor):</strong> <code>MenuItem(const std::string& name, double price, int quantity)</code>.
+
+                        هذي الدالة تتنفذ لما أنشئ كائن جديد من <code>MenuItem</code>. تاخذ الاسم والسعر والكمية كمدخلات، واستخدمت <strong>قائمة التهيئة المبدئية (initializer list)</strong> <code>: name(name), price(price), quantity(quantity) {}</code> لتهيئتها. هذي طريقة أنيقة وفعالة.
+
+                    </li>
+
+                    <li><strong>الدالة الهادمة (Destructor):</strong> <code>virtual ~MenuItem() {}</code>.
+
+                        هذي مهمة جدًا. جعلتها <code>virtual</code> لأني أخطط لاستخدام الوراثة وتعدد الأوجه (Polymorphism). لو حذفت كائن من كلاس مشتق (مثل <code>Burger</code>) عن طريق مؤشر من الكلاس الأساسي (<code>MenuItem*</code>)، كلمة <code>virtual</code> تضمن أن الدالة الهادمة الصحيحة للكلاس المشتق هي اللي تتنفذ أولاً، وبعدها الدالة الهادمة للكلاس الأساسي. هذا يمنع تسرب الذاكرة (memory leaks).
+
+                    </li>
+
+                    <li><strong>دالة <code>displayItem()</code>:</strong> <code>virtual void displayItem() const</code>.
+
+                        هذي الدالة وظيفتها تعرض تفاصيل العنصر. جعلتها <code>virtual</code> عشان الكلاسات المشتقة تقدر تعيد تعريفها (override) وتضيف تفاصيلها الخاصة (مثل نوع اللحم للبرجر). كلمة <code>const</code> في النهاية تعني أن هذه الدالة ما راح تعدل على أي من بيانات الكائن (<code>name</code>, <code>price</code>, <code>quantity</code>). داخلها، استخدمت دوال من <code><iomanip></code> مثل <code>setw(25)</code> لتحديد عرض حقل الاسم بـ 25 حرف، <code>left</code> لمحاذاة الاسم لليسار، و <code>fixed</code> مع <code>setprecision(2)</code> لعرض السعر برقمين بعد الفاصلة العشرية.
+
+                    </li>
+
+                    <li><strong>دوال Getter:</strong> <code>getName()</code>, <code>getPrice()</code>, <code>getQuantity()</code>.
+
+                        هذي دوال بسيطة عشان أقدر "أحصل" على قيم المتغيرات الخاصة (<code>name</code>, <code>price</code>, <code>quantity</code>) من خارج الكلاس، لأنها <code>protected</code>. كلها <code>const</code> لأنها دوال قراءة فقط ولا تعدل على الكائن.
+
+                    </li>
+
+                    <li><strong>دالة Setter:</strong> <code>setQuantity(int newQuantity)</code>.
+
+                        هذي الدالة تسمح لي بتعديل قيمة <code>quantity</code>. أضفت شرط بسيط للتأكد إن الكمية الجديدة ما تكون سالبة. كان ممكن أضيف رسالة خطأ لو المستخدم حاول يدخل قيمة سالبة.
+
+                    </li>
+
+                </ul>
+
+            </li>
+
+        </ul>
+
+
+
+        <h3>4. الكلاسات المشتقة: `Burger`, `Pizza`, `Drink`</h3>
+
+        <p>بعد ما سويت الكلاس الأساسي، بدأت أسوي كلاسات متخصصة ترث منه.</p>
+
+
+
+        <h4>أ. كلاس `Burger`</h4>
+
+        <pre><code class="keyword">class</span> <span class="class-name">Burger</span> : <span class="keyword">public</span> <span class="class-name">MenuItem</span> {
+
+<span class="keyword">private</span>: <span class="comment">// هذا عضو خاص بصنف البرجر فقط، ما تقدر الأصناف الأخرى أو الكود الخارجي يوصل له مباشرة</span>
+
+    std::string pattyType; <span class="comment">// نوع اللحم (بقري، دجاج، إلخ)</span>
+
+
+
+<span class="keyword">public</span>:
+
+    <span class="comment">// الدالة البانية لصنف البرجر</span>
+
+    <span class="comment">// تستدعي الدالة البانية للصنف الأساسي MenuItem عشان تهيئ الاسم والسعر والكمية</span>
+
+    <span class="comment">// ( : MenuItem(name, price, quantity) )</span>
+
+    <span class="comment">// بعدين تهيئ المتغير الخاص بالبرجر pattyType. القيمة الافتراضية لنوع اللحم هي "Beef" لو ما حددتها لما أنشئ كائن برجر</span>
+
+    <span class="class-name">Burger</span>(<span class="keyword">const</span> string& name, <span class="type">double</span> price, <span class="type">int</span> quantity, <span class="keyword">const</span> string& pattyType = <span class="string">"Beef"</span>)
+
+    : <span class="class-name">MenuItem</span>(name, price, quantity), pattyType(pattyType) {}
+
+
+
+    <span class="comment">// هنا أعيد تعريف (override) دالة عرض التفاصيل اللي ورثتها من MenuItem</span>
+
+    <span class="comment">// عشان أضيف معلومات خاصة بالبرجر (نوع اللحم)</span>
+
+    <span class="comment">// كلمة override تساعد المترجم يتأكد إني فعلاً قاعد أعيد تعريف دالة موجودة في الصنف الأساسي وهي virtual</span>
+
+    <span class="type">void</span> displayItem() <span class="keyword">const override</span> {
+
+        cout << <span class="string">"Burger: "</span>; <span class="comment">// أطبع نوع العنصر أولاً</span>
+
+        <span class="class-name">MenuItem</span>::displayItem(); <span class="comment">// بعدين أستدعي دالة العرض من الصنف الأساسي (MenuItem) عشان تطبع الاسم والسعر والكمية</span>
+
+        cout << <span class="string">" | Patty Type: "</span> << pattyType << std::endl; <span class="comment">// وأخيراً أضيف المعلومة الخاصة بالبرجر وأطبع سطر جديد</span>
+
+    }
+
+};</code></pre>
+
+        <p>كلاس <code>Burger</code> يرث بشكل <code>public</code> من <code>MenuItem</code>. هذا يعني "البرجر هو نوع من عناصر القائمة".</p>
+
+        <ul>
+
+            <li><strong>عضو خاص (<code>private</code>):</strong> <code>pattyType</code> (من نوع <code>std::string</code>) لتخزين نوع اللحم. هذا خاص بالبرجر فقط.</li>
+
+            <li><strong>الدالة البانية (Constructor):</strong> <code>Burger(...)</code>.
+
+                لاحظت كيف إني استدعيت الدالة البانية للكلاس الأساسي <code>MenuItem(name, price, quantity)</code> في قائمة التهيئة المبدئية. هذا عشان أهيئ الأجزاء الموروثة (الاسم والسعر والكمية). بعدين أهيئ العضو الخاص بالبرجر <code>pattyType</code>. حطيت قيمة افتراضية لـ <code>pattyType</code> وهي "Beef" عشان لو ما حددت نوع اللحم، يكون بقري بشكل تلقائي.
+
+            </li>
+
+            <li><strong>إعادة تعريف <code>displayItem()</code>:</strong> <code>void displayItem() const override</code>.
+
+                هنا استخدمت كلمة <code>override</code>. هذي الكلمة مهمة، فهي تخبر الكومبايلر أني أقصد إعادة تعريف دالة موجودة أصلاً كـ <code>virtual</code> في الكلاس الأساسي. لو أخطأت في اسم الدالة أو معاملاتها، الكومبايلر راح ينبهني.
+
+                في هذه الدالة، طبعت كلمة "Burger: " أولاً، ثم استدعيت <code>MenuItem::displayItem()</code> عشان تطبع التفاصيل الأساسية (الاسم، السعر، الكمية) اللي عرفتها في الكلاس الأساسي، وأخيراً أضفت المعلومة الخاصة بالبرجر وهي نوع اللحم <code>pattyType</code> وطبعت سطر جديد <code>std::endl</code>.
+
+            </li>
+
+        </ul>
+
+
+
+        <h4>ب. كلاس `Pizza`</h4>
+
+        <pre><code class="keyword">class</span> <span class="class-name">Pizza</span> : <span class="keyword">public</span> <span class="class-name">MenuItem</span> {
+
+<span class="keyword">private</span>:
+
+    std::string size; <span class="comment">// حجم البيتزا (صغيرة، وسط، كبيرة)</span>
+
+
+
+<span class="keyword">public</span>:
+
+    <span class="comment">// الدالة البانية لصنف البيتزا</span>
+
+    <span class="class-name">Pizza</span>(<span class="keyword">const</span> string& name, <span class="type">double</span> price, <span class="type">int</span> quantity, <span class="keyword">const</span> string& size)
+
+    : <span class="class-name">MenuItem</span>(name, price, quantity), size(size) {}
+
+
+
+    <span class="comment">// إعادة تعريف دالة عرض التفاصيل للبيتزا</span>
+
+    <span class="type">void</span> displayItem() <span class="keyword">const override</span> {
+
+        cout << <span class="string">"Pizza:  "</span>; <span class="comment">// نوع العنصر</span>
+
+        <span class="class-name">MenuItem</span>::displayItem(); <span class="comment">// تفاصيل العنصر الأساسية من MenuItem</span>
+
+        cout << <span class="string">" | Size: "</span> << size << std::endl; <span class="comment">// حجم البيتزا</span>
+
+    }
+
+};</code></pre>
+
+        <p>كلاس <code>Pizza</code> مشابه جداً لكلاس <code>Burger</code>.</p>
+
+        <ul>
+
+            <li>يرث من <code>MenuItem</code>.</li>
+
+            <li>له عضو خاص <code>size</code> (من نوع <code>std::string</code>) لتخزين حجم البيتزا.</li>
+
+            <li>الدالة البانية تستدعي دالة البناء للكلاس الأساسي وتهيئ <code>size</code>.</li>
+
+            <li>يعيد تعريف دالة <code>displayItem()</code> ليضيف "Pizza: " وحجم البيتزا.</li>
+
+        </ul>
+
+
+
+        <h4>ج. كلاس `Drink`</h4>
+
+        <pre><code class="keyword">class</span> <span class="class-name">Drink</span> : <span class="keyword">public</span> <span class="class-name">MenuItem</span> {
+
+<span class="keyword">private</span>:
+
+    <span class="type">bool</span> isCold; <span class="comment">// هل المشروب بارد (true) أو ساخن (false)</span>
+
+
+
+<span class="keyword">public</span>:
+
+    <span class="comment">// الدالة البانية لصنف المشروبات، القيمة الافتراضية لـ isCold هي true (بارد)</span>
+
+    <span class="class-name">Drink</span>(<span class="keyword">const</span> string& name, <span class="type">double</span> price, <span class="type">int</span> quantity, <span class="type">bool</span> isCold = <span class="keyword">true</span>)
+
+    : <span class="class-name">MenuItem</span>(name, price, quantity), isCold(isCold) {}
+
+
+
+    <span class="comment">// إعادة تعريف دالة عرض التفاصيل للمشروبات</span>
+
+    <span class="type">void</span> displayItem() <span class="keyword">const override</span> {
+
+        cout << <span class="string">"Drink:  "</span>; <span class="comment">// نوع العنصر</span>
+
+        <span class="class-name">MenuItem</span>::displayItem(); <span class="comment">// تفاصيل العنصر الأساسية</span>
+
+        <span class="comment">// هنا أستخدم تعبير شرطي (ternary operator) عشان أطبع "بارد" أو "ساخن" بناءً على قيمة isCold</span>
+
+        cout << (isCold ? <span class="string">" | Cold"</span> : <span class="string">" | Hot"</span>) << std::endl;
+
+    }
+
+};</code></pre>
+
+        <p>كلاس <code>Drink</code> أيضاً يتبع نفس النمط:</p>
+
+        <ul>
+
+            <li>يرث من <code>MenuItem</code>.</li>
+
+            <li>له عضو خاص <code>isCold</code> (من نوع <code>bool</code>) ليحدد إذا كان المشروب باردًا (<code>true</code>) أو ساخنًا (<code>false</code>).</li>
+
+            <li>الدالة البانية تستدعي دالة البناء للكلاس الأساسي وتهيئ <code>isCold</code>. هنا أيضاً وضعت قيمة افتراضية لـ <code>isCold</code> وهي <code>true</code> (بارد).</li>
+
+            <li>يعيد تعريف دالة <code>displayItem()</code> ليضيف "Drink: " وما إذا كان المشروب باردًا أو ساخنًا. هنا استخدمت <strong>التعبير الشرطي الثلاثي (ternary operator)</strong> <code>(isCold ? " | Cold" : " | Hot")</code> كطريقة مختصرة للطباعة بناءً على قيمة <code>isCold</code>.</li>
+
+        </ul>
+
+
+
+        <h3>5. نهاية حارس التضمين</h3>
+
+        <pre><code class="preprocessor">#endif // نهاية حارس التضمين MENU_ITEM_H. مهم جداً يكون مطابق لاسم الـ #define في البداية.</code></pre>
+
+        <p>وأخيراً، أنهيت الملف بـ <code>#endif</code> لإغلاق حارس التضمين. مهم جداً أن يكون الاسم هنا <code>MENU_ITEM_H</code> مطابقاً للاسم المستخدم في <code>#define</code> و <code>#ifndef</code> في بداية الملف.</p>
+
+        <p class="note">بهذا أكون قد انتهيت من تصميم الهيكل الأساسي لعناصر القائمة. الآن، لننتقل إلى الملف الرئيسي الذي سيستخدم هذه الكلاسات.</p>
+
+
+
+        <h2>الملف الثاني: `main.cpp` (الملف التنفيذي)</h2>
+
+        <p>في هذا الملف، سأقوم بإنشاء قائمة طعام فعلية باستخدام الكلاسات التي عرفتها في `menu_item.h`، وسأعرضها وأقوم ببعض العمليات عليها.</p>
+
+
+
+        <h3>1. تضمين المكتبات وملف الترويسة</h3>
+
+        <pre><code class="preprocessor">// بسم الله الرحمن الرحيم
+
+
+
+// هذي المكتبة عشان أقدر أستخدم cout للطباعة على الشاشة
+
+#include <iostream>
+
+// وهذي عشان أقدر أستخدم std::vector، اللي هو زي مصفوفة بس مرنة أكثر في الحجم
+
+#include <vector>
+
+// هنا أستدعي ملف الهيدر اللي سويته قبل شوي (menu_item.h) عشان أقدر أستخدم الأصناف (الكلاسات)
+
+// اللي عرفتها فيه زي MenuItem, Burger, Pizza, Drink
+
+#include "menu_item.h"
+
+using namespace std;</code></pre>
+
+        <p>في بداية ملف `main.cpp`، قمت بتضمين:</p>
+
+        <ul>
+
+            <li><code><iostream></code>: للطباعة على الشاشة (<code>cout</code>).</li>
+
+            <li><code><vector></code>: لأني سأستخدم <code>std::vector</code> لإنشاء قائمة ديناميكية من عناصر الطعام. الـ vector يشبه المصفوفة ولكنه أكثر مرونة حيث يمكن أن يتغير حجمه.</li>
+
+            <li><code>"menu_item.h"</code>: هذا هو ملف الهيدر الذي أنشأته بنفسي. لاحظت أني استخدمت علامتي اقتباس مزدوجتين <code>""</code> بدلاً من الأقواس المثلثة <code><></code>. هذا لأن الكومبايلر يبحث عن الملفات بين علامتي اقتباس في نفس مجلد المشروع أولاً، وهو ما أريده هنا.</li>
+
+        </ul>
+
+        <p>ومرة أخرى، استخدمت <code>using namespace std;</code> للتبسيط.</p>
+
+
+
+        <h3>2. دالة `main` - نقطة بداية البرنامج</h3>
+
+        <pre><code class="type">int</span> main() {</code></pre>
+
+        <p>كل برنامج C++ يبدأ التنفيذ من دالة <code>main</code>.</p>
+
+
+
+        <h4>أ. إنشاء قائمة الطعام (<code>std::vector<MenuItem*> menu;</code>)</h4>
+
+        <pre><code>    <span class="comment">// هنا سويت vector (قائمة متغيرة الحجم) سميتها menu.</span>
+
+    <span class="comment">// الـ vector هذا راح يخزن مؤشرات (*) لكائنات من نوع MenuItem.</span>
+
+    <span class="comment">// ليش مؤشرات؟ عشان أقدر أستفيد من تعدد الأوجه (polymorphism) وأخزن</span>
+
+    <span class="comment">// أنواع مختلفة (برجر، بيتزا، مشروب) كلها ترث من MenuItem في نفس القائمة.</span>
+
+    std::vector<<span class="class-name">MenuItem</span>*> menu;</code></pre>
+
+        <p>هنا، أنشأت <code>std::vector</code> وسميته <code>menu</code>. المهم هنا هو نوع العناصر التي سيخزنها هذا الفيكتور: <code>MenuItem*</code>. هذا يعني أن الفيكتور سيخزن <strong>مؤشرات (pointers)</strong> إلى كائنات من نوع <code>MenuItem</code> (أو أي كلاس يرث منه).</p>
+
+        <p><strong>لماذا استخدمت المؤشرات؟</strong> السبب الرئيسي هو <strong>تعدد الأوجه (Polymorphism)</strong>. بما أن <code>Burger</code>, <code>Pizza</code>, و <code>Drink</code> كلها ترث من <code>MenuItem</code>، يمكنني تخزين مؤشرات لأنواع مختلفة من هذه العناصر في نفس القائمة. عندما أستدعي دالة <code>virtual</code> (مثل <code>displayItem()</code>) من خلال مؤشر للكلاس الأساسي، سيتم استدعاء النسخة الصحيحة من الدالة الخاصة بالكائن الفعلي (برجر، بيتزا، أو مشروب).</p>
+
+
+
+        <h4>ب. إضافة عناصر إلى القائمة</h4>
+
+        <pre><code>    <span class="comment">// يلا نبدأ نضيف عناصر للقائمة</span>
+
+    <span class="comment">// أول شيء، أضيف برجر جديد للقائمة. كلمة new هنا تعني إني قاعد أنشئ كائن برجر جديد</span>
+
+    <span class="comment">// في الذاكرة (heap) بشكل ديناميكي، والـ vector بيخزن عنوان هذا الكائن (المؤشر له).</span>
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Burger</span>(<span class="string">"Classic Burger"</span>, <span class="number">25.50</span>, <span class="number">50</span>, <span class="string">"Premium Beef"</span>));
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Burger</span>(<span class="string">"Grilled Chicken Burger"</span>, <span class="number">22.00</span>, <span class="number">40</span>, <span class="string">"Chicken"</span>)); <span class="comment">// برجر ثاني، بس بالدجاج</span>
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Pizza</span>(<span class="string">"Margherita Pizza"</span>, <span class="number">35.00</span>, <span class="number">30</span>, <span class="string">"Medium"</span>)); <span class="comment">// بيتزا مارغريتا حجم وسط</span>
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Pizza</span>(<span class="string">"Pepperoni Pizza"</span>, <span class="number">45.75</span>, <span class="number">25</span>, <span class="string">"Large"</span>)); <span class="comment">// بيتزا بيبروني حجم كبير</span>
+
+    <span class="comment">// مشروب كولا، الكمية المتوفرة 100. بما إني ما حددت إذا هو بارد أو حار، راح ياخذ القيمة الافتراضية اللي هي بارد (true)</span>
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Drink</span>(<span class="string">"Coca Cola"</span>, <span class="number">5.00</span>, <span class="number">100</span>));
+
+    <span class="comment">// وهذا شاي، ووضحت إنه مو بارد (false يعني حار)</span>
+
+    menu.push_back(<span class="keyword">new</span> <span class="class-name">Drink</span>(<span class="string">"Tea"</span>, <span class="number">3.50</span>, <span class="number">60</span>, <span class="keyword">false</span>));</code></pre>
+
+        <p>هنا بدأت أضيف عناصر لقائمتي باستخدام الدالة <code>push_back()</code> الخاصة بالفيكتور.</p>
+
+        <ul>
+
+            <li>لكل عنصر، استخدمت كلمة <code>new</code> لإنشاء كائن جديد من النوع المناسب (<code>Burger</code>, <code>Pizza</code>, <code>Drink</code>) بشكل ديناميكي في الذاكرة (تحديداً في منطقة الـ heap).</li>
+
+            <li>دالة <code>push_back()</code> تضيف المؤشر الذي يعيده <code>new</code> (وهو عنوان الكائن في الذاكرة) إلى نهاية الفيكتور <code>menu</code>.</li>
+
+            <li>لاحظت كيف أني لبعض المشروبات (مثل الكولا) لم أحدد المعامل الأخير (<code>isCold</code>)، فاستخدمت القيمة الافتراضية التي حددتها في الكونستركتور (وهي <code>true</code> يعني بارد). بينما للشاي، حددت <code>false</code> ليكون ساخناً.</li>
+
+        </ul>
+
+
+
+        <h4>ج. طباعة ترويسة القائمة</h4>
+
+        <pre><code>    <span class="comment">// مجرد خطوط عشان أرتب شكل القائمة المطبوعة</span>
+
+    std::cout << <span class="string">"--------------------------------------------------------------"</span> << std::endl;
+
+    std::cout << <span class="string">"                     Restaurant Menu                          "</span> << std::endl;
+
+    std::cout << <span class="string">"--------------------------------------------------------------"</span> << std::endl;</code></pre>
+
+        <p>هذه مجرد أسطر طباعة عادية باستخدام <code>std::cout</code> لترتيب شكل القائمة عند عرضها على الشاشة.</p>
+
+
+
+        <h4>د. عرض عناصر القائمة (استغلال تعدد الأوجه)</h4>
+
+        <pre><code>    <span class="comment">// هنا ألف على كل عنصر (item) في قائمة menu.</span>
+
+    <span class="comment">// لاحظ إني أتعامل مع كل عنصر كأنه MenuItem* (مؤشر لعنصر قائمة عام)،</span>
+
+    <span class="comment">// لكن لما أنادي item->displayItem()، راح يتم استدعاء دالة displayItem الصحيحة</span>
+
+    <span class="comment">// لكل نوع (يعني دالة البرجر للبرجر، ودالة البيتزا للبيتزا وهكذا). هذا هو تعدد الأوجه (polymorphism)!</span>
+
+    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="class-name">MenuItem</span>* item : menu) {
+
+        item->displayItem(); <span class="comment">// استدعاء دالة العرض الخاصة بكل عنصر</span>
+
+    }
+
+
+
+    std::cout << <span class="string">"--------------------------------------------------------------"</span> << std::endl;</code></pre>
+
+        <p>هذا هو الجزء الذي يظهر قوة <strong>تعدد الأوجه (Polymorphism)</strong>!</p>
+
+        <ul>
+
+            <li>استخدمت حلقة <code>for</code> من نوع (range-based for loop) للمرور على كل عنصر في الفيكتور <code>menu</code>.</li>
+
+            <li>نوع المتغير <code>item</code> داخل الحلقة هو <code>const MenuItem*</code> (مؤشر ثابت إلى <code>MenuItem</code>). كلمة <code>const</code> هنا تعني أنني لن أغير الكائن الذي يشير إليه المؤشر <em>من خلال هذا المؤشر داخل الحلقة</em> (ولكن يمكنني تغيير الكائن نفسه إذا لم يكن المؤشر يشير إلى كائن <code>const</code>، وهو الحال هنا مع <code>setQuantity</code> لاحقاً).</li>
+
+            <li>عندما أستدعي <code>item->displayItem()</code>، على الرغم من أن <code>item</code> هو مؤشر من النوع الأساسي <code>MenuItem*</code>، إلا أن C++ سيقوم تلقائيًا بتنفيذ النسخة <strong>الصحيحة</strong> من دالة <code>displayItem()</code> التي تم إعادة تعريفها (<code>override</code>) في الكلاس المشتق الفعلي (<code>Burger</code>, <code>Pizza</code>, أو <code>Drink</code>). هذا بفضل أن دالة <code>displayItem()</code> في الكلاس الأساسي مُعرَّفة كـ <code>virtual</code>.</li>
+
+        </ul>
+
+
+
+        <h4>هـ. تحديث كمية عنصر وعرضه مجدداً</h4>
+
+        <pre><code>    <span class="comment">// هنا أتأكد إن القائمة مو فاضية وإن العنصر الأول موجود فعلاً (مو مؤشر فارغ nullptr)</span>
+
+    <span class="comment">// قبل ما أحاول أعدل كميته. احتياط واجب!</span>
+
+    <span class="keyword">if</span> (!menu.empty() && menu[<span class="number">0</span>] != <span class="keyword">nullptr</span>) {
+
+        <span class="comment">// رسالة توضيحية إني بأحدث كمية أول عنصر</span>
+
+        cout << <span class="string">"\nUpdating quantity of "</span> << menu[<span class="number">0</span>]->getName() << <span class="string">"..."</span> << endl;
+
+        <span class="comment">// أجيب الكمية الحالية لأول عنصر (menu[0]->getQuantity())، أنقص منها 2،</span>
+
+        <span class="comment">// وبعدين أستخدم setQuantity عشان أحدث الكمية.</span>
+
+        menu[<span class="number">0</span>]->setQuantity(menu[<span class="number">0</span>]->getQuantity() - <span class="number">2</span>);
+
+        <span class="comment">// أعرض تفاصيل العنصر الأول مرة ثانية عشان أشوف التغيير في الكمية</span>
+
+        menu[<span class="number">0</span>]->displayItem();
+
+        cout << endl; <span class="comment">// عشان السطر الجديد بعد الطباعة</span>
+
+    }
+
+
+
+    cout << <span class="string">"--------------------------------------------------------------"</span> << endl;</code></pre>
+
+        <p>هنا، أردت أن أختبر دالة <code>setQuantity()</code> التي كتبتها في الكلاس <code>MenuItem</code>.</p>
+
+        <ul>
+
+            <li>أولاً، قمت بالتحقق <code>if (!menu.empty() && menu[0] != nullptr)</code>. هذا شرط احترازي للتأكد أن القائمة ليست فارغة وأن العنصر الأول (في الموقع <code>0</code>) ليس مؤشرًا فارغًا (<code>nullptr</code>) قبل محاولة الوصول إليه.</li>
+
+            <li>طبعت رسالة توضيحية.</li>
+
+            <li>استدعيت <code>menu[0]->setQuantity(...)</code> لتحديث كمية العنصر الأول. مررت لها القيمة الجديدة وهي الكمية الحالية (<code>menu[0]->getQuantity()</code>) مطروحًا منها <code>2</code>.</li>
+
+            <li>ثم استدعيت <code>menu[0]->displayItem()</code> مرة أخرى لعرض تفاصيل العنصر الأول بعد التحديث، حتى أرى التغيير في الكمية.</li>
+
+        </ul>
+
+
+
+        <h4>و. تنظيف الذاكرة</h4>
+
+        <pre><code>    <span class="comment">// الآن جاء وقت تنظيف الذاكرة. مهم جداً!</span>
+
+    cout << <span class="string">"\nCleaning up memory..."</span> << endl;
+
+    <span class="comment">// ألف على كل عنصر في القائمة مرة ثانية.</span>
+
+    <span class="comment">// لكل عنصر (item) اللي أنشأته بـ new، لازم أحذفه بـ delete.</span>
+
+    <span class="comment">// هذا يحرر الذاكرة اللي حجزتها للكائنات عشان ما يصير عندي تسرب للذاكرة (memory leak).</span>
+
+    <span class="keyword">for</span> (<span class="class-name">MenuItem</span>* item : menu) {
+
+        <span class="keyword">delete</span> item; <span class="comment">// احذف الكائن اللي المؤشر يشير إليه</span>
+
+        item = <span class="keyword">nullptr</span>; <span class="comment">// (اختياري ولكنه ممارسة جيدة) أجعل المؤشر يشير إلى لا شيء بعد الحذف لتجنب استخدامه بالخطأ</span>
+
+    }
+
+    <span class="comment">// بعد ما حذفت الكائنات نفسها، الآن أمسح المؤشرات من الـ vector.</span>
+
+    <span class="comment">// دالة clear() تزيل كل العناصر (المؤشرات في حالتنا) من الـ vector وتخلي حجمه صفر.</span>
+
+    menu.clear();</code></pre>
+
+        <p>هذه خطوة <strong>حاسمة ومهمة جدًا</strong> في C++ عند التعامل مع الذاكرة الديناميكية.</p>
+
+        <ul>
+
+            <li>بما أنني استخدمت <code>new</code> لإنشاء كل كائن في القائمة، فأنا مسؤول عن تحرير الذاكرة التي تم حجزها لهذه الكائنات عندما لا أعد بحاجة إليها. إذا لم أفعل ذلك، سيحدث ما يسمى بـ <strong>تسرب الذاكرة (memory leak)</strong>, حيث تظل الذاكرة محجوزة دون استخدام، مما قد يؤدي إلى استنفاد ذاكرة النظام في البرامج الكبيرة أو التي تعمل لفترات طويلة.</li>
+
+            <li>مريت على كل مؤشر <code>item</code> في الفيكتور <code>menu</code>.</li>
+
+            <li>لكل مؤشر، استخدمت <code>delete item;</code>. هذا يستدعي الدالة الهادمة (Destructor) للكائن الذي يشير إليه <code>item</code> (وبفضل أن الدالة الهادمة في <code>MenuItem</code> هي <code>virtual</code>, سيتم استدعاء التسلسل الصحيح للدوال الهادمة للكلاس المشتق ثم الأساسي)، ثم يحرر الذاكرة.</li>
+
+            <li>بعد <code>delete</code>، قمت بإسناد <code>item = nullptr;</code>. هذه ليست خطوة ضرورية تمامًا ولكنها ممارسة جيدة لتجنب "المؤشرات المعلقة" (dangling pointers) – أي مؤشرات لا تزال تحتفظ بعنوان ذاكرة تم تحريرها. لو حاولت استخدام هذا المؤشر لاحقًا بالخطأ، فإن إسناده إلى <code>nullptr</code> قد يساعد في اكتشاف الخطأ مبكرًا.</li>
+
+            <li>أخيرًا، استدعيت <code>menu.clear();</code>. هذه الدالة تزيل جميع العناصر (التي هي مؤشرات في حالتنا) من الفيكتور <code>menu</code>، وتجعل حجمه صفرًا. لاحظ أن <code>clear()</code> تزيل المؤشرات من الفيكتور، ولكنها لا تحذف الكائنات التي تشير إليها هذه المؤشرات. لهذا السبب، كان من الضروري أن أقوم بعملية <code>delete</code> لكل عنصر أولاً.</li>
+
+        </ul>
+
+
+
+        <h4>ز. نهاية البرنامج</h4>
+
+        <pre><code>    <span class="comment">// أرجع صفر، يعني البرنامج انتهى بنجاح</span>
+
+    <span class="keyword">return</span> <span class="number">0</span>;
+
+}</code></pre>
+
+        <p>وفي النهاية، <code>return 0;</code> من دالة <code>main</code> تشير إلى نظام التشغيل أن البرنامج قد انتهى بنجاح.</p>
+
+
+
+        <p class="note">وهكذا، أكون قد شرحت الكود الذي كتبته بالتفصيل، موضحًا كل خطوة والغرض منها. آمل أن يكون الشرح واضحًا ومفيدًا!</p>
+
+    </div>
+
+</body>
+
+</html>
